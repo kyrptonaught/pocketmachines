@@ -1,0 +1,32 @@
+{
+  "variants": {
+    "facing=up": {
+      "model": "pocketmachines:block/ioextension"
+    },
+    "facing=down": {
+      "model": "pocketmachines:block/ioextension",
+      "x": 180
+    },
+    "facing=east": {
+      "model": "pocketmachines:block/ioextension",
+      "y": 90,
+      "x": 90
+    },
+    "facing=south": {
+      "model": "pocketmachines:block/ioextension",
+      "y": 180,
+      "x": 90
+    },
+    "facing=west": {
+      "model": "pocketmachines:block/ioextension",
+      "y": 270,
+      "x": 90
+    },
+    "facing=north": {
+      "model": "pocketmachines:block/ioextension",
+      "y": 0,
+      "x": 90
+    }
+  }
+}
+

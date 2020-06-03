@@ -1,0 +1,32 @@
+{
+  "schemaVersion": 1,
+  "id": "pocketmachines",
+  "version": "1.0.0",
+  "name": "Pocket Machines",
+  "description": "Complex machines in a box",
+  "authors": [
+    "kyrptonaught"
+  ],
+  "contact": {
+    "homepage": "https://github.com/kyrptonaught/pocketmachines",
+    "sources": "https://github.com/kyrptonaught/pocketmachines"
+  },
+  "license": "MIT",
+  "icon": "assets/pocketmachines/icon.png",
+  "environment": "*",
+  "mixins": [
+    {
+      "config": "net.kyrptonaught.pocketmachines.json",
+      "environment": "*"
+    }
+  ],
+  "entrypoints": {
+    "main": [
+      "net.kyrptonaught.pocketmachines.PocketMachinesMod"
+    ]
+  },
+  "depends": {
+    "fabricloader": ">=0.4.0",
+    "fabric": "*"
+  }
+}

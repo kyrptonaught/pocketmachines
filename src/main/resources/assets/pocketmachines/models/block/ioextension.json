@@ -1,0 +1,12 @@
+{
+  "parent": "block/cube_all",
+  "textures": {
+    "particle": "pocketmachines:block/pmio",
+    "down": "pocketmachines:block/pmio",
+    "up": "pocketmachines:block/pmio",
+    "north": "pocketmachines:block/ioextension",
+    "east": "pocketmachines:block/ioextension",
+    "south": "pocketmachines:block/ioextension",
+    "west": "pocketmachines:block/ioextension"
+  }
+}
