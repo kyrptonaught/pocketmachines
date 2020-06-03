@@ -1,4 +1,4 @@
-package net.kyrptonaught.pocketmachines.Inventory;
+package net.kyrptonaught.pocketmachines.inventory;
 
 import net.minecraft.inventory.BasicInventory;
 import net.minecraft.inventory.SidedInventory;

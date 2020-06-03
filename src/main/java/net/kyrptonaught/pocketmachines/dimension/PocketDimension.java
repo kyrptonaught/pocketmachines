@@ -2,6 +2,7 @@ package net.kyrptonaught.pocketmachines.dimension;
 
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
+import net.kyrptonaught.pocketmachines.registry.ModDimensions;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
 import net.minecraft.util.math.Vec3d;
@@ -23,10 +24,10 @@ public class PocketDimension extends Dimension {
 
     @Override
     public ChunkGenerator<?> createChunkGenerator() {
-        return Dimensions.VOID_CHUNK_GENERATOR.create(world,
+        return ModDimensions.VOID_CHUNK_GENERATOR.create(world,
                 BiomeSourceType.FIXED.applyConfig(BiomeSourceType.FIXED.getConfig(world.getLevelProperties())
                         .setBiome(Biomes.PLAINS)),
-                Dimensions.VOID_CHUNK_GENERATOR.createSettings());
+                ModDimensions.VOID_CHUNK_GENERATOR.createSettings());
     }
 
     // The following 2 methods relate to the dimension's spawn point.
@@ -72,6 +73,6 @@ public class PocketDimension extends Dimension {
 
     @Override
     public DimensionType getType() {
-        return Dimensions.pm;
+        return ModDimensions.pm;
     }
 }

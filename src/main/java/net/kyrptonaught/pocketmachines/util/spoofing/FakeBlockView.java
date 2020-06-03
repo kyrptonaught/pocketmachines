@@ -1,4 +1,4 @@
-package net.kyrptonaught.pocketmachines.Util;
+package net.kyrptonaught.pocketmachines.util.spoofing;
 
 
 import net.minecraft.block.Block;

@@ -1,8 +1,9 @@
-package net.kyrptonaught.pocketmachines.Items;
+package net.kyrptonaught.pocketmachines.items;
 
 import net.kyrptonaught.pocketmachines.PocketMachinesMod;
-import net.kyrptonaught.pocketmachines.Util.DimensionalBlockPos;
 import net.kyrptonaught.pocketmachines.blocks.*;
+import net.kyrptonaught.pocketmachines.registry.ModBlocks;
+import net.kyrptonaught.pocketmachines.util.PocketMachineHelper;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
@@ -30,19 +31,19 @@ public class Wrench extends Item {
             World world = context.getWorld();
             Block hitBlock = world.getBlockState(pos).getBlock();
             if (hitBlock instanceof PocketMachineBlock) {
-                activatePocketMachine(world, pos);
+                PocketMachineHelper.activatePocketMachine(world, pos);
             } else if (hitBlock instanceof BaseIOBlock) {
                 CompoundTag tag = playerEntity.getMainHandStack().getOrCreateTag();
                 tag.putLong("prevPos", pos.asLong());
-            } else if (hitBlock instanceof PMWallBlock) {
+            } else if (hitBlock instanceof WallBlock) {
                 CompoundTag tag = playerEntity.getMainHandStack().getOrCreateTag();
                 if (tag.contains("prevPos")) {
                     BlockPos oldPos = BlockPos.fromLong(tag.getLong("prevPos"));
                     BlockState IOSIDE = world.getBlockState(oldPos);
-                    String id = PocketMachinesMod.getPocketMachineID(world, oldPos);
-                    BlockPos machinePos = PocketMachinesMod.getMachine(id).pos;
-                    if (isValidMove(pos, oldPos, IOSIDE.get(PMIOBlock.IOSIDE), machinePos)) {
-                        world.setBlockState(oldPos, PocketMachinesMod.pmwallBlock.getDefaultState());
+                    String id = PocketMachineHelper.getPocketMachineID(world, oldPos);
+                    BlockPos machinePos = PocketMachineHelper.getMachine(id).pos;
+                    if (isValidMove(pos, oldPos, IOSIDE.get(InventoryIOBlock.IOSIDE), machinePos)) {
+                        world.setBlockState(oldPos, ModBlocks.wallBlock.getDefaultState());
                         world.setBlockState(pos, IOSIDE);
                         ((PocketMachineBaseBlockEntity) world.getBlockEntity(pos)).pocketMachineID = id;
                         tag.remove("prevPos");
@@ -53,18 +54,6 @@ public class Wrench extends Item {
         return ActionResult.SUCCESS;
     }
 
-    public void activatePocketMachine(World world, BlockPos pos) {
-        String pocketMachineID = PocketMachinesMod.getPocketMachineID(world, pos);
-        if (!pocketMachineID.equals("")) {
-            System.out.println("Machine already activated: " + pocketMachineID);
-            return;
-        }
-        pocketMachineID = PocketMachinesMod.generatePocketMachineID();
-        PocketMachinesMod.generatePocketMachine(world, pocketMachineID);
-        ((PocketMachineBaseBlockEntity) world.getBlockEntity(pos)).pocketMachineID = pocketMachineID;
-        PocketMachinesMod.getMachine(pocketMachineID).pocketMachineBlock = new DimensionalBlockPos(world.getDimension().getType(), pos);
-        System.out.println("Generated Machine: " + pocketMachineID);
-    }
 
     public Boolean isValidMove(BlockPos newPos, BlockPos oldPos, Direction IOSIDE, BlockPos pocketMachinePos) {
         pocketMachinePos = new BlockPos(pocketMachinePos.getX() * 9, pocketMachinePos.getY() * 9, pocketMachinePos.getZ() * 9);

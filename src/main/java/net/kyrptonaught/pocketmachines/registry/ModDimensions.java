@@ -1,7 +1,10 @@
-package net.kyrptonaught.pocketmachines.dimension;
+package net.kyrptonaught.pocketmachines.registry;
 
 import net.fabricmc.fabric.api.dimension.v1.FabricDimensionType;
 import net.kyrptonaught.pocketmachines.PocketMachinesMod;
+import net.kyrptonaught.pocketmachines.dimension.FabricChunkGeneratorType;
+import net.kyrptonaught.pocketmachines.dimension.PocketDimension;
+import net.kyrptonaught.pocketmachines.dimension.VoidChunkGenerator;
 import net.minecraft.block.pattern.BlockPattern;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
@@ -10,7 +13,7 @@ import net.minecraft.world.Heightmap;
 import net.minecraft.world.gen.chunk.ChunkGeneratorConfig;
 import net.minecraft.world.gen.chunk.ChunkGeneratorType;
 
-public class Dimensions {
+public class ModDimensions {
     public static ChunkGeneratorType<ChunkGeneratorConfig, VoidChunkGenerator> VOID_CHUNK_GENERATOR;
 
     public static final FabricDimensionType pm = FabricDimensionType.builder()

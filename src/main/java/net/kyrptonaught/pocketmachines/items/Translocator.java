@@ -1,10 +1,11 @@
-package net.kyrptonaught.pocketmachines.Items;
+package net.kyrptonaught.pocketmachines.items;
 
 import net.fabricmc.fabric.api.dimension.v1.FabricDimensions;
-import net.kyrptonaught.pocketmachines.Inventory.PocketMachine;
 import net.kyrptonaught.pocketmachines.PocketMachinesMod;
 import net.kyrptonaught.pocketmachines.blocks.PocketMachineBlock;
-import net.kyrptonaught.pocketmachines.dimension.Dimensions;
+import net.kyrptonaught.pocketmachines.inventory.PocketMachine;
+import net.kyrptonaught.pocketmachines.registry.ModDimensions;
+import net.kyrptonaught.pocketmachines.util.PocketMachineHelper;
 import net.minecraft.block.pattern.BlockPattern;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
@@ -36,10 +37,10 @@ public class Translocator extends Item {
                 tag.putFloat("prevPitch", playerEntity.pitch);
                 tag.putFloat("prevYaw", playerEntity.yaw);
                 tag.putInt("prevDim", Registry.DIMENSION_TYPE.getRawId(playerEntity.dimension));
-                PocketMachine machine = PocketMachinesMod.getMachine(context.getWorld(), context.getBlockPos());
+                PocketMachine machine = PocketMachineHelper.getMachine(context.getWorld(), context.getBlockPos());
                 BlockPos pocketMachinePos = new BlockPos(machine.pos.getX() * 9 + 4.5, machine.pos.getY() * 9 + 1, machine.pos.getZ() * 9 + 4.5);
-                if (playerEntity.dimension != Dimensions.pm)
-                    FabricDimensions.teleport(playerEntity, Dimensions.pm, (entity, serverWorld, direction, v, v1) -> {
+                if (playerEntity.dimension != ModDimensions.pm)
+                    FabricDimensions.teleport(playerEntity, ModDimensions.pm, (entity, serverWorld, direction, v, v1) -> {
                         entity.refreshPositionAndAngles(pocketMachinePos.getX(), pocketMachinePos.getY(), pocketMachinePos.getZ(), 0, 0);
                         return new BlockPattern.TeleportTarget(new Vec3d(pocketMachinePos), Vec3d.ZERO, 0);
                     });

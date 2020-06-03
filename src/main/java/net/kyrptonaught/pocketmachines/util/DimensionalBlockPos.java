@@ -1,4 +1,4 @@
-package net.kyrptonaught.pocketmachines.Util;
+package net.kyrptonaught.pocketmachines.util;
 
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.util.math.BlockPos;
@@ -9,8 +9,9 @@ import net.minecraft.world.dimension.DimensionType;
 public class DimensionalBlockPos {
     public DimensionType dimensionType;
     public BlockPos pos;
+
     public DimensionalBlockPos(DimensionType dimension, BlockPos pos) {
-       this.pos = pos;
+        this.pos = pos;
         this.dimensionType = dimension;
     }
 

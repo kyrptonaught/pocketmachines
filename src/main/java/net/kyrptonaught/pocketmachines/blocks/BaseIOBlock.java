@@ -1,7 +1,7 @@
 package net.kyrptonaught.pocketmachines.blocks;
 
-import net.kyrptonaught.pocketmachines.Items.IOConfigurator;
 import net.kyrptonaught.pocketmachines.PocketMachinesMod;
+import net.kyrptonaught.pocketmachines.items.IOConfigurator;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockEntityProvider;
 import net.minecraft.block.BlockState;

@@ -17,10 +17,10 @@ import net.minecraft.util.math.Direction;
 import net.minecraft.util.registry.Registry;
 import net.minecraft.world.IWorld;
 
-public class IOExtension extends Block implements InventoryProvider {
+public class IOExtensionBlock extends Block implements InventoryProvider {
     public static final DirectionProperty FACING = Properties.FACING;
 
-    public IOExtension(Settings settings) {
+    public IOExtensionBlock(Settings settings) {
         super(settings);
         Registry.register(Registry.BLOCK, new Identifier(PocketMachinesMod.MOD_ID, "ioextension"), this);
         Registry.register(Registry.ITEM, new Identifier(PocketMachinesMod.MOD_ID, "ioextension"), new BlockItem(this, new Item.Settings().group(PocketMachinesMod.GROUP)));

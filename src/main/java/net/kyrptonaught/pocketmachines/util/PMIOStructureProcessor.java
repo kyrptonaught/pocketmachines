@@ -1,4 +1,4 @@
-package net.kyrptonaught.pocketmachines.Util;
+package net.kyrptonaught.pocketmachines.util;
 
 import com.mojang.datafixers.Dynamic;
 import com.mojang.datafixers.types.DynamicOps;

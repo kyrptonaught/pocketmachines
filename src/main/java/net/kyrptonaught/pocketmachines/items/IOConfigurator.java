@@ -1,8 +1,11 @@
-package net.kyrptonaught.pocketmachines.Items;
+package net.kyrptonaught.pocketmachines.items;
 
-import net.kyrptonaught.pocketmachines.Inventory.PocketMachine;
 import net.kyrptonaught.pocketmachines.PocketMachinesMod;
-import net.kyrptonaught.pocketmachines.blocks.*;
+import net.kyrptonaught.pocketmachines.blocks.BaseIOBlock;
+import net.kyrptonaught.pocketmachines.blocks.PocketMachineBaseBlockEntity;
+import net.kyrptonaught.pocketmachines.inventory.PocketMachine;
+import net.kyrptonaught.pocketmachines.registry.ModBlocks;
+import net.kyrptonaught.pocketmachines.util.PocketMachineHelper;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
@@ -31,10 +34,10 @@ public class IOConfigurator extends Item {
             Block hitBlock = world.getBlockState(pos).getBlock();
             if (playerEntity.isSneaking()) {
                 if (hitBlock instanceof BaseIOBlock) {
-                    int index = PocketMachinesMod.ioblocks.indexOf(hitBlock) + 1;
-                    if (index >= PocketMachinesMod.ioblocks.size()) index = 0;
+                    int index = ModBlocks.ioblocks.indexOf(hitBlock) + 1;
+                    if (index >= ModBlocks.ioblocks.size()) index = 0;
                     BlockState old = world.getBlockState(pos);
-                    setBlockWithData(world, pos, clone(old, PocketMachinesMod.ioblocks.get(index).getDefaultState()));
+                    setBlockWithData(world, pos, clone(old, ModBlocks.ioblocks.get(index).getDefaultState()));
                 }
             } else {
                 BlockState state = world.getBlockState(pos).cycle(BaseIOBlock.IODIR);
@@ -49,7 +52,7 @@ public class IOConfigurator extends Item {
     }
 
     public void setBlockWithData(World world, BlockPos pos, BlockState state) {
-        PocketMachine machine = PocketMachinesMod.getMachine(world, pos);
+        PocketMachine machine = PocketMachineHelper.getMachine(world, pos);
         Direction ioside = state.get(BaseIOBlock.IOSIDE);
         BaseIOBlock.INOUTDIR iodir = state.get(BaseIOBlock.IODIR);
         machine.redstoneSignalDir[ioside.ordinal()] = iodir;

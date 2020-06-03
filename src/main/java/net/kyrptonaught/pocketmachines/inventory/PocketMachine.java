@@ -1,8 +1,8 @@
-package net.kyrptonaught.pocketmachines.Inventory;
+package net.kyrptonaught.pocketmachines.inventory;
 
-import net.kyrptonaught.pocketmachines.Util.DimensionalBlockPos;
 import net.kyrptonaught.pocketmachines.blocks.BaseIOBlock;
-import net.kyrptonaught.pocketmachines.dimension.Dimensions;
+import net.kyrptonaught.pocketmachines.registry.ModDimensions;
+import net.kyrptonaught.pocketmachines.util.DimensionalBlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
@@ -21,11 +21,11 @@ public class PocketMachine {
     public DimensionalBlockPos pocketMachineBlock;
 
     public BlockPos getIOBlockForSide(World world, Direction side) {
-        if(world.dimension.getType() != Dimensions.pm) {
+        if (world.dimension.getType() != ModDimensions.pm) {
             System.out.println("WRONG DIMMENSION FOR IO");
             return null;
         }
-        if(redstoneOutputPos[side.ordinal()] != null)
+        if (redstoneOutputPos[side.ordinal()] != null)
             return redstoneOutputPos[side.ordinal()];
         BlockPos pocketMachinePos = new BlockPos(pos.getX() * 9 + 4, pos.getY() * 9 + 4, pos.getZ() * 9 + 4);
         Direction.Axis axis = side.getAxis();

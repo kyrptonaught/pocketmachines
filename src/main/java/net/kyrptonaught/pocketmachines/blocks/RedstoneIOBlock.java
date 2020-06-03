@@ -1,8 +1,8 @@
 package net.kyrptonaught.pocketmachines.blocks;
 
-import net.kyrptonaught.pocketmachines.Inventory.PocketMachine;
-import net.kyrptonaught.pocketmachines.PocketMachinesMod;
-import net.kyrptonaught.pocketmachines.Util.FakeBlockView;
+import net.kyrptonaught.pocketmachines.inventory.PocketMachine;
+import net.kyrptonaught.pocketmachines.util.PocketMachineHelper;
+import net.kyrptonaught.pocketmachines.util.spoofing.FakeBlockView;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
@@ -28,7 +28,7 @@ public class RedstoneIOBlock extends BaseIOBlock {
     }
 
     public void neighborUpdate(BlockState state, World world, BlockPos pos, Block block, BlockPos neighborPos, boolean moved) {
-        PocketMachine machine = PocketMachinesMod.getMachine(world, pos);
+        PocketMachine machine = PocketMachineHelper.getMachine(world, pos);
         if (machine == null) return;
         if (machine.redstoneSignalDir[state.get(IOSIDE).ordinal()] != INOUTDIR.INPUT) {
             ServerWorld machineWorld = ((ServerWorld) world).getServer().getWorld(machine.pocketMachineBlock.dimensionType);
@@ -51,7 +51,7 @@ public class RedstoneIOBlock extends BaseIOBlock {
 
     @Override
     public int getWeakRedstonePower(BlockState state, BlockView view, BlockPos pos, Direction facing) {
-        PocketMachine machine = PocketMachinesMod.getMachine((World) view, pos);
+        PocketMachine machine = PocketMachineHelper.getMachine((World) view, pos);
         if (machine == null) return 0;
         if (machine.redstoneSignalDir[state.get(IOSIDE).ordinal()] != INOUTDIR.OUTPUT) {
             ServerWorld machineWorld = ((ServerWorld) view).getServer().getWorld(machine.pocketMachineBlock.dimensionType);
