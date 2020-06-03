@@ -1,2 +1,2 @@
-# Quick Shulker
-Quickly open a held shulker box with the press of a key!
+# Pocket Machines
+Store complex machines inside of a one block space!
