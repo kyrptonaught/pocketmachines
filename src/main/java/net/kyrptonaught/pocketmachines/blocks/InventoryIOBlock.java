@@ -7,8 +7,8 @@ import net.minecraft.block.InventoryProvider;
 import net.minecraft.inventory.SidedInventory;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
-import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
+import net.minecraft.world.WorldAccess;
 
 public class InventoryIOBlock extends BaseIOBlock implements InventoryProvider {
 
@@ -18,7 +18,7 @@ public class InventoryIOBlock extends BaseIOBlock implements InventoryProvider {
 
 
     @Override
-    public SidedInventory getInventory(BlockState state, IWorld world, BlockPos pos) {
+    public SidedInventory getInventory(BlockState state, WorldAccess world, BlockPos pos) {
         Direction ioside = state.get(IOSIDE);
         PocketInventory pocketInventory = PocketMachineHelper.getInv((World) world, pos);
         return pocketInventory.createIOPocketInventory(ioside);

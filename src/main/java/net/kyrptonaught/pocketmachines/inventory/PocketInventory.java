@@ -1,46 +1,30 @@
 package net.kyrptonaught.pocketmachines.inventory;
 
-import net.minecraft.inventory.BasicInventory;
 import net.minecraft.inventory.SidedInventory;
+import net.minecraft.inventory.SimpleInventory;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.ListTag;
+import net.minecraft.nbt.NbtCompound;
+import net.minecraft.nbt.NbtList;
 import net.minecraft.util.math.Direction;
 
-public class PocketInventory extends BasicInventory implements SidedInventory {
+public class PocketInventory extends SimpleInventory implements SidedInventory {
 
     public PocketInventory() {
         super(6);
-    }
-
-    @Override
-    public int[] getInvAvailableSlots(Direction side) {
-        return new int[]{side.ordinal()};
     }
 
     public IOPocketInventory createIOPocketInventory(Direction ioPort) {
         return new IOPocketInventory(this, ioPort);
     }
 
-    @Override
-    public boolean canInsertInvStack(int slot, ItemStack stack, Direction dir) {
-        return true;
-    }
-
-    @Override
-    public boolean canExtractInvStack(int slot, ItemStack stack, Direction dir) {
-        return true;
-    }
-
-
-    public static CompoundTag toTag(CompoundTag tag, PocketInventory inventory) {
-        ListTag listTag = new ListTag();
-        for (int i = 0; i < inventory.getInvSize(); ++i) {
-            ItemStack itemStack = inventory.getInvStack(i);
+    public static NbtCompound toTag(NbtCompound tag, PocketInventory inventory) {
+        NbtList listTag = new NbtList();
+        for (int i = 0; i < inventory.size(); ++i) {
+            ItemStack itemStack = inventory.getStack(i);
             if (!itemStack.isEmpty()) {
-                CompoundTag compoundTag = new CompoundTag();
+                NbtCompound compoundTag = new NbtCompound();
                 compoundTag.putByte("Slot", (byte) i);
-                itemStack.toTag(compoundTag);
+                itemStack.writeNbt(compoundTag);
                 listTag.add(compoundTag);
             }
         }
@@ -48,16 +32,31 @@ public class PocketInventory extends BasicInventory implements SidedInventory {
         return tag;
     }
 
-    public static PocketInventory fromTag(CompoundTag tag) {
+    public static PocketInventory fromTag(NbtCompound tag) {
         PocketInventory inventory = new PocketInventory();
-        ListTag listTag = tag.getList("Items", 10);
+        NbtList listTag = tag.getList("Items", 10);
         for (int i = 0; i < listTag.size(); ++i) {
-            CompoundTag compoundTag = listTag.getCompound(i);
+            NbtCompound compoundTag = listTag.getCompound(i);
             int j = compoundTag.getByte("Slot") & 255;
-            if (j >= 0 && j < inventory.getInvSize()) {
-                inventory.setInvStack(j, ItemStack.fromTag(compoundTag));
+            if (j >= 0 && j < inventory.size()) {
+                inventory.setStack(j, ItemStack.fromNbt(compoundTag));
             }
         }
         return inventory;
+    }
+
+    @Override
+    public int[] getAvailableSlots(Direction side) {
+        return new int[]{side.ordinal()};
+    }
+
+    @Override
+    public boolean canInsert(int slot, ItemStack stack, Direction dir) {
+        return true;
+    }
+
+    @Override
+    public boolean canExtract(int slot, ItemStack stack, Direction dir) {
+        return true;
     }
 }

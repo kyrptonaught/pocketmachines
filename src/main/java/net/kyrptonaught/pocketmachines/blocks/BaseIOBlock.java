@@ -1,5 +1,6 @@
 package net.kyrptonaught.pocketmachines.blocks;
 
+import net.fabricmc.fabric.api.object.builder.v1.block.entity.FabricBlockEntityTypeBuilder;
 import net.kyrptonaught.pocketmachines.PocketMachinesMod;
 import net.kyrptonaught.pocketmachines.items.IOConfigurator;
 import net.minecraft.block.Block;
@@ -34,7 +35,7 @@ public class BaseIOBlock extends Block implements BlockEntityProvider {
         super(settings);
         Registry.register(Registry.BLOCK, new Identifier(PocketMachinesMod.MOD_ID, name), this);
         Registry.register(Registry.ITEM, new Identifier(PocketMachinesMod.MOD_ID, name), new BlockItem(this, new Item.Settings().group(PocketMachinesMod.GROUP)));
-        blockEntity = Registry.register(Registry.BLOCK_ENTITY_TYPE, new Identifier(PocketMachinesMod.MOD_ID, name), BlockEntityType.Builder.create(PocketMachineBaseBlockEntity::new, this).build(null));
+        blockEntity = Registry.register(Registry.BLOCK_ENTITY_TYPE, new Identifier(PocketMachinesMod.MOD_ID, name), FabricBlockEntityTypeBuilder.create(PocketMachineBaseBlockEntity::new, this).build(null));
         this.setDefaultState(this.stateManager.getDefaultState().with(IOSIDE, Direction.NORTH).with(IODIR, INOUTDIR.IO));
     }
 
@@ -51,8 +52,8 @@ public class BaseIOBlock extends Block implements BlockEntityProvider {
     }
 
     @Override
-    public BlockEntity createBlockEntity(BlockView view) {
-        return new PocketMachineBaseBlockEntity();
+    public BlockEntity createBlockEntity(BlockPos pos, BlockState state){
+        return new PocketMachineBaseBlockEntity(pos,state);
     }
 
     public enum INOUTDIR implements StringIdentifiable {

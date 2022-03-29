@@ -1,41 +1,44 @@
 package net.kyrptonaught.pocketmachines.blocks;
 
-import net.fabricmc.fabric.api.block.entity.BlockEntityClientSerializable;
+import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.BlockEntityType;
-import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.NbtCompound;
+import net.minecraft.util.math.BlockPos;
 
-public class PocketMachineBaseBlockEntity extends BlockEntity implements BlockEntityClientSerializable {
+public class PocketMachineBaseBlockEntity extends BlockEntity  {
     public String pocketMachineID = "";
 
-    public PocketMachineBaseBlockEntity(BlockEntityType<?> type) {
-        super(type);
+    public PocketMachineBaseBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state) {
+        super(type, pos, state);
     }
 
-    public PocketMachineBaseBlockEntity() {
-        this(PocketMachineBlock.blockEntity);
+    public PocketMachineBaseBlockEntity(BlockPos pos, BlockState state) {
+        super(PocketMachineBlock.blockEntity, pos, state);
     }
 
     @Override
-    public void fromTag(CompoundTag tag) {
-        super.fromTag(tag);
+    public void readNbt(NbtCompound nbt) {
+        super.readNbt(nbt);
+        pocketMachineID = nbt.getString("pocketmachineid");
+    }
+
+    @Override
+    protected void writeNbt(NbtCompound nbt) {
+        super.writeNbt(nbt);
+        nbt.putString("pocketmachineid", pocketMachineID);
+    }
+
+    /*
+    @Override
+    public void fromClientTag(NbtCompound tag) {
         pocketMachineID = tag.getString("pocketmachineid");
     }
 
     @Override
-    public CompoundTag toTag(CompoundTag tag) {
-        super.toTag(tag);
-        tag.putString("pocketmachineid", pocketMachineID);
-        return tag;
-    }
-
-    @Override
-    public void fromClientTag(CompoundTag tag) {
-        fromTag(tag);
-    }
-
-    @Override
-    public CompoundTag toClientTag(CompoundTag tag) {
+    public NbtCompound toClientTag(NbtCompound tag) {
         return toTag(tag);
     }
+
+     */
 }

@@ -8,17 +8,17 @@ import net.minecraft.util.math.Direction;
 public class EmptyInventory extends PocketInventory implements SidedInventory {
 
     @Override
-    public int[] getInvAvailableSlots(Direction side) {
+    public int[] getAvailableSlots(Direction side) {
         return new int[0];
     }
 
     @Override
-    public boolean canInsertInvStack(int slot, ItemStack stack, Direction dir) {
+    public boolean canInsert(int slot, ItemStack stack, Direction dir) {
         return false;
     }
 
     @Override
-    public boolean canExtractInvStack(int slot, ItemStack stack, Direction dir) {
+    public boolean canExtract(int slot, ItemStack stack, Direction dir) {
         return false;
     }
 }

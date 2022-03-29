@@ -10,11 +10,14 @@ import net.minecraft.server.world.ServerWorld;
 import net.minecraft.structure.Structure;
 import net.minecraft.structure.StructurePlacementData;
 import net.minecraft.util.Identifier;
+import net.minecraft.util.Util;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import org.apache.commons.lang3.RandomStringUtils;
 
 import java.util.List;
+import java.util.Optional;
+import java.util.Random;
 
 public class PocketMachineHelper {
     public static String getPocketMachineID(World world, BlockPos pos) {
@@ -48,7 +51,7 @@ public class PocketMachineHelper {
         pocketMachineID = generatePocketMachineID();
         generatePocketMachine(world, pocketMachineID);
         ((PocketMachineBaseBlockEntity) world.getBlockEntity(pos)).pocketMachineID = pocketMachineID;
-        getMachine(pocketMachineID).pocketMachineBlock = new DimensionalBlockPos(world.getDimension().getType(), pos);
+        getMachine(pocketMachineID).pocketMachineBlock = new DimensionalBlockPos(world.getRegistryKey(), pos);
         System.out.println("Generated Machine: " + pocketMachineID);
     }
 
@@ -60,15 +63,18 @@ public class PocketMachineHelper {
     }
 
     public static void generatePocketMachine(World world, String pocketMachineID) {
-        ServerWorld pmWorld = ((ServerWorld) world).getServer().getWorld(ModDimensions.pm);
-        Structure cube = pmWorld.getStructureManager().getStructure(new Identifier(PocketMachinesMod.MOD_ID, "pocketmachine"));
-        StructurePlacementData structurePlacementData = (new StructurePlacementData()).setChunkPosition(null);
-        PMIOStructureProcessor pmioStructureProcessor = new PMIOStructureProcessor();
-        structurePlacementData.addProcessor(pmioStructureProcessor);
-        BlockPos pos = PocketMachinesMod.CMAN.createInvAndGivePos(pocketMachineID);
-        cube.place(pmWorld, pos.up(pos.getY() * 8).south(pos.getZ() * 8).east(pos.getX() * 8), structurePlacementData);
-        List<BlockPos> pmioBlocks = pmioStructureProcessor.pmioBlocks;
-        for (int i = 0; i < pmioBlocks.size(); i++)
-            ((PocketMachineBaseBlockEntity) pmWorld.getBlockEntity(pmioBlocks.get(i))).pocketMachineID = pocketMachineID;
+        ServerWorld pmWorld = ((ServerWorld) world).getServer().getWorld(ModDimensions.getPocketDimension());
+
+        Optional<Structure> cube = pmWorld.getStructureManager().getStructure(new Identifier(PocketMachinesMod.MOD_ID, "pocketmachine"));
+        if (cube.isPresent()) {
+            StructurePlacementData structurePlacementData = (new StructurePlacementData());
+            PMIOStructureProcessor pmioStructureProcessor = new PMIOStructureProcessor();
+            structurePlacementData.addProcessor(pmioStructureProcessor);
+            BlockPos pos = PocketMachinesMod.CMAN.createInvAndGivePos(pocketMachineID);
+            cube.get().place(pmWorld, pos.up(pos.getY() * 8).south(pos.getZ() * 8).east(pos.getX() * 8), BlockPos.ORIGIN, structurePlacementData, pmWorld.getRandom(), 2);
+            List<BlockPos> pmioBlocks = pmioStructureProcessor.pmioBlocks;
+            for (int i = 0; i < pmioBlocks.size(); i++)
+                ((PocketMachineBaseBlockEntity) pmWorld.getBlockEntity(pmioBlocks.get(i))).pocketMachineID = pocketMachineID;
+        }
     }
 }

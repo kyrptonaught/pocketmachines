@@ -1,5 +1,6 @@
 package net.kyrptonaught.pocketmachines.blocks;
 
+import net.fabricmc.fabric.api.object.builder.v1.block.entity.FabricBlockEntityTypeBuilder;
 import net.kyrptonaught.pocketmachines.PocketMachinesMod;
 import net.kyrptonaught.pocketmachines.inventory.PocketMachine;
 import net.kyrptonaught.pocketmachines.registry.ModDimensions;
@@ -19,8 +20,8 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.util.registry.Registry;
 import net.minecraft.world.BlockView;
-import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
+import net.minecraft.world.WorldAccess;
 
 public class PocketMachineBlock extends Block implements BlockEntityProvider, InventoryProvider {
     public static BlockEntityType<PocketMachineBaseBlockEntity> blockEntity;
@@ -28,12 +29,12 @@ public class PocketMachineBlock extends Block implements BlockEntityProvider, In
     public PocketMachineBlock(Settings settings) {
         super(settings);
         Registry.register(Registry.BLOCK, new Identifier(PocketMachinesMod.MOD_ID, "pocketmachineblock"), this);
-        blockEntity = Registry.register(Registry.BLOCK_ENTITY_TYPE, PocketMachinesMod.MOD_ID + ":pocketmachineblock", BlockEntityType.Builder.create(PocketMachineBaseBlockEntity::new, this).build(null));
+        blockEntity = Registry.register(Registry.BLOCK_ENTITY_TYPE, PocketMachinesMod.MOD_ID + ":pocketmachineblock", FabricBlockEntityTypeBuilder.create(PocketMachineBaseBlockEntity::new, this).build(null));
         Registry.register(Registry.ITEM, new Identifier(PocketMachinesMod.MOD_ID, "pocketmachineblock"), new BlockItem(this, new Item.Settings().group(PocketMachinesMod.GROUP)));
 
     }
 
-    public BlockState getStateForNeighborUpdate(BlockState state, Direction facing, BlockState neighborState, IWorld world, BlockPos pos, BlockPos neighborPos) {
+    public BlockState getStateForNeighborUpdate(BlockState state, Direction facing, BlockState neighborState, WorldAccess world, BlockPos pos, BlockPos neighborPos) {
         if (!world.isClient()) {
             neighborUpdate(state, (World) world, pos, null, neighborPos, false);
         }
@@ -45,14 +46,17 @@ public class PocketMachineBlock extends Block implements BlockEntityProvider, In
         Direction blockDir = Direction.fromVector(dir.getX(), dir.getY(), dir.getZ());
         PocketMachine machine = PocketMachineHelper.getMachine(world, pos);
         if (machine == null) return;
+        /*
         if (machine.redstoneSignalDir[blockDir.ordinal()] != BaseIOBlock.INOUTDIR.OUTPUT) {
-            ServerWorld machineWorld = ((ServerWorld) world).getServer().getWorld(ModDimensions.pm);
-            BlockPos ioPos = machine.getIOBlockForSide(machineWorld, blockDir);
 
+            ServerWorld machineWorld = ((ServerWorld) world).getServer().getWorld(ModDimensions.getPocketDimension());
+            BlockPos ioPos = machine.getIOBlockForSide(machineWorld, blockDir);
             BlockPos updatePos = ioPos.offset(blockDir.getOpposite());
             BlockState updateState = machineWorld.getBlockState(updatePos);
+
             updateState.neighborUpdate(machineWorld, updatePos, updateState.getBlock(), ioPos, false);
         }
+         */
     }
 
     @Override
@@ -71,26 +75,29 @@ public class PocketMachineBlock extends Block implements BlockEntityProvider, In
             PocketMachine machine = PocketMachineHelper.getMachine((World) view, pos);
             if (machine == null) return 0;
             facing = facing.getOpposite();
+            /*
             if (machine.redstoneSignalDir[facing.ordinal()] != BaseIOBlock.INOUTDIR.INPUT) {
-                ServerWorld machineWorld = ((ServerWorld) view).getServer().getWorld(ModDimensions.pm);
+                ServerWorld machineWorld = ((ServerWorld) view).getServer().getWorld(ModDimensions.getPocketDimension());
                 BlockPos ioPos = machine.getIOBlockForSide(machineWorld, facing);
 
                 //return machineWorld.getEmittedRedstonePower(ioPos.offset(facing), facing);
                 FakeBlockView fakeView = new FakeBlockView(machineWorld, ioPos);
                 fakeView.updateNeighbors(ioPos, Blocks.GRASS_BLOCK);
-                return fakeView.getBlockState(ioPos.offset(facing.getOpposite())).getStrongRedstonePower(fakeView, ioPos.offset(facing.getOpposite()), facing);
+                return fakeView.getBlockState(ioPos.offset(facing.getOpposite())).getStrongRedstonePower((BlockView) fakeView, ioPos.offset(facing.getOpposite()), facing);
             }
+
+             */
         }
         return 0;
     }
 
     @Override
-    public BlockEntity createBlockEntity(BlockView var1) {
-        return new PocketMachineBaseBlockEntity();
+    public BlockEntity createBlockEntity(BlockPos pos, BlockState state) {
+        return new PocketMachineBaseBlockEntity(pos,state);
     }
 
     @Override
-    public SidedInventory getInventory(BlockState state, IWorld world, BlockPos pos) {
+    public SidedInventory getInventory(BlockState state, WorldAccess world, BlockPos pos) {
         return PocketMachineHelper.getInv((World) world, pos);
     }
 

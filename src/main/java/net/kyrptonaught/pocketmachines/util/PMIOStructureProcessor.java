@@ -1,7 +1,5 @@
 package net.kyrptonaught.pocketmachines.util;
 
-import com.mojang.datafixers.Dynamic;
-import com.mojang.datafixers.types.DynamicOps;
 import net.kyrptonaught.pocketmachines.blocks.BaseIOBlock;
 import net.minecraft.structure.Structure;
 import net.minecraft.structure.StructurePlacementData;
@@ -17,7 +15,9 @@ public class PMIOStructureProcessor extends StructureProcessor {
 
     public List<BlockPos> pmioBlocks = new ArrayList<>();
 
-    public Structure.StructureBlockInfo process(WorldView worldView, BlockPos pos, Structure.StructureBlockInfo structureBlockInfo, Structure.StructureBlockInfo structureBlockInfo2, StructurePlacementData placementData) {
+
+    @Override
+    public Structure.StructureBlockInfo process(WorldView worldView, BlockPos pos, BlockPos blockPos, Structure.StructureBlockInfo structureBlockInfo, Structure.StructureBlockInfo structureBlockInfo2, StructurePlacementData structurePlacementData) {
         if (structureBlockInfo2.state.getBlock() instanceof BaseIOBlock)
             pmioBlocks.add(structureBlockInfo2.pos);
         return structureBlockInfo2;
@@ -28,8 +28,4 @@ public class PMIOStructureProcessor extends StructureProcessor {
         return null;
     }
 
-    @Override
-    protected <T> Dynamic<T> method_16666(DynamicOps<T> dynamicOps) {
-        return null;
-    }
 }

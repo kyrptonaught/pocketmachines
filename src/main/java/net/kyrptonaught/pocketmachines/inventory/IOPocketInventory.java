@@ -1,15 +1,14 @@
 package net.kyrptonaught.pocketmachines.inventory;
 
-import net.minecraft.inventory.BasicInventory;
-import net.minecraft.inventory.InventoryListener;
+import net.minecraft.inventory.InventoryChangedListener;
 import net.minecraft.inventory.SidedInventory;
-import net.minecraft.item.Item;
+import net.minecraft.inventory.SimpleInventory;
 import net.minecraft.item.ItemStack;
-import net.minecraft.recipe.RecipeFinder;
+import net.minecraft.recipe.RecipeMatcher;
 import net.minecraft.util.math.Direction;
 
 
-public class IOPocketInventory extends BasicInventory implements SidedInventory {
+public class IOPocketInventory extends SimpleInventory implements SidedInventory {
     PocketInventory parentInventory;
     Direction ioside;
 
@@ -20,69 +19,84 @@ public class IOPocketInventory extends BasicInventory implements SidedInventory 
     }
 
     @Override
-    public int[] getInvAvailableSlots(Direction side) {
-        return parentInventory.getInvAvailableSlots(ioside);
+    public int[] getAvailableSlots(Direction side) {
+        return parentInventory.getAvailableSlots(ioside);
     }
 
-    public void addListener(InventoryListener inventoryListener) {
+    @Override
+    public void addListener(InventoryChangedListener inventoryListener) {
         parentInventory.addListener(inventoryListener);
     }
 
-    public void removeListener(InventoryListener inventoryListener) {
+    @Override
+    public void removeListener(InventoryChangedListener inventoryListener) {
         parentInventory.removeListener(inventoryListener);
     }
 
-    public ItemStack getInvStack(int slot) {
-        return parentInventory.getInvStack(slot);
+    @Override
+    public ItemStack getStack(int slot) {
+        return parentInventory.getStack(slot);
     }
 
-    public ItemStack takeInvStack(int slot, int amount) {
-        return parentInventory.takeInvStack(slot, amount);
+    @Override
+    public ItemStack removeStack(int slot, int amount) {
+        return parentInventory.removeStack(slot, amount);
     }
-
+   /*
+    @Override
     public ItemStack poll(Item item, int count) {
-        return parentInventory.poll(item, count);
+        return parentInventory.(item, count);
     }
 
-    public ItemStack add(ItemStack itemStack) {
-        return parentInventory.add(itemStack);
+    */
+    @Override
+    public ItemStack addStack(ItemStack itemStack) {
+        return parentInventory.addStack(itemStack);
     }
 
-    public ItemStack removeInvStack(int slot) {
-        return parentInventory.removeInvStack(slot);
+    @Override
+    public ItemStack removeStack(int slot) {
+        return parentInventory.removeStack(slot);
     }
 
-    public void setInvStack(int slot, ItemStack stack) {
-        parentInventory.setInvStack(slot, stack);
+    @Override
+    public void setStack(int slot, ItemStack stack) {
+        parentInventory.setStack(slot, stack);
     }
 
-    public boolean isInvEmpty() {
-        return parentInventory.isInvEmpty();
+    @Override
+    public boolean isEmpty() {
+        return parentInventory.isEmpty();
     }
 
+    @Override
     public void markDirty() {
         parentInventory.markDirty();
     }
 
+    @Override
     public void clear() {
         parentInventory.clear();
     }
 
-    public void provideRecipeInputs(RecipeFinder recipeFinder) {
-        parentInventory.provideRecipeInputs(recipeFinder);
+    @Override
+    public void provideRecipeInputs(RecipeMatcher finder) {
+        parentInventory.provideRecipeInputs(finder);
     }
 
+    @Override
     public String toString() {
         return parentInventory.toString();
     }
 
     @Override
-    public boolean canInsertInvStack(int slot, ItemStack stack, Direction dir) {
+    public boolean canInsert(int slot, ItemStack stack, Direction dir) {
         return true;
     }
 
     @Override
-    public boolean canExtractInvStack(int slot, ItemStack stack, Direction dir) {
+    public boolean canExtract(int slot, ItemStack stack, Direction dir) {
         return true;
     }
+
 }

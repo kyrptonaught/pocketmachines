@@ -1,6 +1,8 @@
 package net.kyrptonaught.pocketmachines.inventory;
 
-import net.minecraft.nbt.CompoundTag;
+
+import net.kyrptonaught.pocketmachines.PocketMachinesMod;
+import net.minecraft.nbt.NbtCompound;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.world.PersistentState;
@@ -16,29 +18,32 @@ public class ChannelManager extends PersistentState {
     private final HashSet<BlockPos> usedPos = new HashSet<>();
     private BlockPos lastUsed = new BlockPos(0, 0, 0);
 
-    public ChannelManager(String key) {
-        super(key);
+    public ChannelManager() {
+        super();
     }
 
-    public void fromTag(CompoundTag tag) {
-        pocketMachines.clear();
-        CompoundTag machines = tag.getCompound("machines");
+    public static PersistentState fromNbt(NbtCompound tag) {
+        ChannelManager cman = new ChannelManager();
+        NbtCompound machines = tag.getCompound("machines");
         for (String key : machines.getKeys()) {
             {
-                CompoundTag machineTag = machines.getCompound(key);
+                NbtCompound machineTag = machines.getCompound(key);
                 PocketMachine machine = new PocketMachine();
                 machine.fromTag(machineTag);
-                pocketMachines.put(key, machine);
-                usedPos.add(machine.pos);
+                cman.pocketMachines.put(key, machine);
+                cman.usedPos.add(machine.pos);
             }
         }
         String savedVersion = tag.getString("saveVersion");
+        if (!savedVersion.equals(cman.saveVersion))
+            System.out.println("[" + PocketMachinesMod.MOD_ID + "]: savefile outdated");
+        return cman;
     }
 
-    public CompoundTag toTag(CompoundTag tag) {
-        CompoundTag machines = new CompoundTag();
+    public NbtCompound writeNbt(NbtCompound tag) {
+        NbtCompound machines = new NbtCompound();
         for (String key : pocketMachines.keySet()) {
-            machines.put(key, pocketMachines.get(key).toTag(new CompoundTag()));
+            machines.put(key, pocketMachines.get(key).toTag(new NbtCompound()));
         }
         tag.put("machines", machines);
         tag.putString("saveVersion", saveVersion);

@@ -9,7 +9,7 @@ import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemUsageContext;
-import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.NbtCompound;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
@@ -33,10 +33,10 @@ public class Wrench extends Item {
             if (hitBlock instanceof PocketMachineBlock) {
                 PocketMachineHelper.activatePocketMachine(world, pos);
             } else if (hitBlock instanceof BaseIOBlock) {
-                CompoundTag tag = playerEntity.getMainHandStack().getOrCreateTag();
+                NbtCompound tag = playerEntity.getMainHandStack().getOrCreateSubNbt(PocketMachinesMod.MOD_ID);
                 tag.putLong("prevPos", pos.asLong());
             } else if (hitBlock instanceof WallBlock) {
-                CompoundTag tag = playerEntity.getMainHandStack().getOrCreateTag();
+                NbtCompound tag = playerEntity.getMainHandStack().getOrCreateSubNbt(PocketMachinesMod.MOD_ID);
                 if (tag.contains("prevPos")) {
                     BlockPos oldPos = BlockPos.fromLong(tag.getLong("prevPos"));
                     BlockState IOSIDE = world.getBlockState(oldPos);

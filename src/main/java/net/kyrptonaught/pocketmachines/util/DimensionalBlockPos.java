@@ -1,28 +1,30 @@
 package net.kyrptonaught.pocketmachines.util;
 
-import net.minecraft.nbt.CompoundTag;
+import net.kyrptonaught.pocketmachines.registry.ModDimensions;
+import net.minecraft.nbt.NbtCompound;
+import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.registry.Registry;
-import net.minecraft.world.dimension.DimensionType;
+import net.minecraft.util.registry.RegistryKey;
+import net.minecraft.world.World;
 
 
 public class DimensionalBlockPos {
-    public DimensionType dimensionType;
+    public RegistryKey<World> dimensionType;
     public BlockPos pos;
 
-    public DimensionalBlockPos(DimensionType dimension, BlockPos pos) {
+    public DimensionalBlockPos(RegistryKey<World> dimension, BlockPos pos) {
         this.pos = pos;
         this.dimensionType = dimension;
     }
 
-    public static DimensionalBlockPos fromTag(CompoundTag tag) {
-        CompoundTag innerTag = tag.getCompound("machineBlockPos");
-        return new DimensionalBlockPos(Registry.DIMENSION_TYPE.get(innerTag.getInt("dimID")), BlockPos.fromLong(innerTag.getLong("pos")));
+    public static DimensionalBlockPos fromTag(NbtCompound tag) {
+        NbtCompound innerTag = tag.getCompound("machineBlockPos");
+        return new DimensionalBlockPos(ModDimensions.dims.get(new Identifier(innerTag.getString("dimID"))), BlockPos.fromLong(innerTag.getLong("pos")));
     }
 
-    public CompoundTag toTag(CompoundTag tag) {
-        CompoundTag innerTag = new CompoundTag();
-        innerTag.putInt("dimID", Registry.DIMENSION_TYPE.getRawId(this.dimensionType));
+    public NbtCompound toTag(NbtCompound tag) {
+        NbtCompound innerTag = new NbtCompound();
+        innerTag.putString("dimID", this.dimensionType.getValue().toString());
         innerTag.putLong("pos", pos.asLong());
         tag.put("machineBlockPos", innerTag);
         return tag;

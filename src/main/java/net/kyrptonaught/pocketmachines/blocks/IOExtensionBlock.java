@@ -15,7 +15,7 @@ import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.util.registry.Registry;
-import net.minecraft.world.IWorld;
+import net.minecraft.world.WorldAccess;
 
 public class IOExtensionBlock extends Block implements InventoryProvider {
     public static final DirectionProperty FACING = Properties.FACING;
@@ -37,7 +37,7 @@ public class IOExtensionBlock extends Block implements InventoryProvider {
     }
 
     @Override
-    public SidedInventory getInventory(BlockState state, IWorld world, BlockPos pos) {
+    public SidedInventory getInventory(BlockState state, WorldAccess world, BlockPos pos) {
         BlockPos dirPos = pos.offset(state.get(FACING));
         if (world.getBlockState(dirPos).getBlock() instanceof InventoryProvider) {
             return ((InventoryProvider) (world.getBlockState(dirPos).getBlock())).getInventory(world.getBlockState(dirPos), world, dirPos);
